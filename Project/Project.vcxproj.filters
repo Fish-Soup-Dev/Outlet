@@ -74,20 +74,22 @@
     <ClInclude Include="src\Gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ven\vec\vec4.h">
+    <ClInclude Include="src\vec\vec4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ven\vec\vec.h">
+    <ClInclude Include="src\vec\vec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ven\vec\vec3.h">
+    <ClInclude Include="src\vec\vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\log.h">
+    <ClInclude Include="src\vec\vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ven\vec\vec2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\graphics\shaders\vertex.glsl" />
+    <None Include="src\graphics\shaders\fragment.glsl" />
+    <None Include="res\shaders\basic.glsl" />
   </ItemGroup>
 </Project>

@@ -3,8 +3,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "log.h"
 #include "vec/vec.h"
+#include <iostream>
 
 class Window
 {
@@ -13,11 +13,9 @@ public:
 	const char* m_WindowName = "Title";
 	bool m_WindowResiable = true;
 	GLFWwindow* m_Window;
-private:
-	Log* logger;
 public:
-	Window(int W, int H, const char* name, bool Resizeable, Log* log) 
-		: m_WindowWidth(W), m_WindowHeight(H), m_WindowName(name), m_Window(NULL), m_WindowResiable(Resizeable), logger(log) { }
+	Window(int W, int H, const char* name, bool Resizeable) 
+		: m_WindowWidth(W), m_WindowHeight(H), m_WindowName(name), m_Window(NULL), m_WindowResiable(Resizeable) { }
 
 	~Window()
 	{
@@ -29,12 +27,13 @@ public:
 	{
 		if (!glfwInit())
 		{
-			logger->Error("Failed to init GLFW");
+			std::cout << "[ERROR] Failed to init GLFW" << std::endl;
 			exit(-1);
 		}
 
-		logger->Info("GLFW initialized.");
-
+		//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+		//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_RESIZABLE, m_WindowResiable);
 
 		m_Window = glfwCreateWindow(m_WindowWidth, m_WindowHeight, m_WindowName, NULL, NULL);
@@ -42,11 +41,9 @@ public:
 		if (!m_Window)
 		{
 			glfwTerminate();
-			logger->Error("Window is NULL");
+			std::cout << "[ERROR] Window is NULL" << std::endl;
 			exit(-1);
 		}
-
-		logger->Info("Window created.");
 
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);
@@ -54,23 +51,25 @@ public:
 		if (glewInit() != GLEW_OK)
 		{
 			glfwTerminate();
-			logger->Error("Failed to init GLEW");
+			std::cout << "[ERROR] Failed to init GLEW" << std::endl;
 			exit(-1);
 		}
 
-		logger->Info("GLEW initialized.");
+		std::cout << glGetString(GL_VERSION) << std::endl;
 	}
 
 	void Clear(colorRGBA color)
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(color.r(), color.g(), color.b(), color.a());
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
 	void Render()
 	{
 		glfwGetWindowSize(m_Window, &m_WindowWidth, &m_WindowHeight);
-		glfwSwapBuffers(m_Window);
+		glViewport(0, 0, m_WindowWidth, m_WindowHeight);
+		
 		glfwPollEvents();
-	} 
+		glfwSwapBuffers(m_Window);
+	}
 };

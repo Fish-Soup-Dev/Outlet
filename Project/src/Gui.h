@@ -8,9 +8,8 @@ class Gui
 {
 private:
 	GLFWwindow* m_Window;
-	Log* logger;
 public:
-	Gui(GLFWwindow* Window, Log* log) : m_Window(Window), logger(log) { }
+	Gui(GLFWwindow* Window) : m_Window(Window) { }
 
 	~Gui()
 	{
@@ -25,7 +24,6 @@ public:
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
 		ImGui::StyleColorsDark();
-		logger->Info("ImGui context created");
 	}
 
 	void StartFrame()
@@ -39,6 +37,34 @@ public:
 	{
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	void WindowBegin(const char* title, vec2 WindowSize, vec2 WindowPos)
+	{
+		ImGui::SetNextWindowPos(ImVec2(WindowPos.x(), WindowPos.y()));
+		ImGui::SetNextWindowSize(ImVec2(WindowSize.x(), WindowSize.y()));
+		ImGui::Begin(title, NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
+	}
+
+	void WindowBegin(const char* title, vec2 WindowSize)
+	{
+		ImGui::SetNextWindowSize(ImVec2(WindowSize.x(), WindowSize.y()));
+		ImGui::Begin(title, NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+	}
+
+	void WindowBegin(const char* title)
+	{
+		ImGui::Begin(title, NULL, ImGuiWindowFlags_NoCollapse);
+	}
+
+	void WindowEnd()
+	{
+		ImGui::End();
+	}
+
+	void Text(const char* text)
+	{
+		ImGui::Text(text);
 	}
 
 	bool Button(const char* lable, const vec2 size, const colorRGB buttonColor)
@@ -57,5 +83,4 @@ public:
 	{
 		ImGui::ProgressBar(progress, ImVec2(size.x(), size.y()));
 	}
-
 };

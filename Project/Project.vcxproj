@@ -98,11 +98,10 @@
     <ClCompile Include="src\ven\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\log.h" />
-    <ClInclude Include="src\ven\vec\vec.h" />
+    <ClInclude Include="src\vec\vec.h" />
     <ClInclude Include="src\Gui.h" />
-    <ClInclude Include="src\ven\vec\vec2.h" />
-    <ClInclude Include="src\ven\vec\vec3.h" />
+    <ClInclude Include="src\vec\vec2.h" />
+    <ClInclude Include="src\vec\vec3.h" />
     <ClInclude Include="src\ven\imgui\imconfig.h" />
     <ClInclude Include="src\ven\imgui\imgui.h" />
     <ClInclude Include="src\ven\imgui\imgui_impl_glfw.h" />
@@ -113,7 +112,12 @@
     <ClInclude Include="src\ven\imgui\imstb_textedit.h" />
     <ClInclude Include="src\ven\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Window.h" />
-    <ClInclude Include="src\ven\vec\vec4.h" />
+    <ClInclude Include="src\vec\vec4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\basic.glsl" />
+    <None Include="src\graphics\shaders\fragment.glsl" />
+    <None Include="src\graphics\shaders\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
