@@ -1,19 +1,14 @@
-#include "Window.h"
+#include "engine/Renderer.h"
 #include "Gui.h"
 #include "vec/vec.h"
 
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "Shader.h"
-
 int main()
 {
-	Window* window = new Window(800, 600, "Program Window", false);
-	window->Init();
+	Renderer* renderer = new Renderer(800, 600, "Program Window", false);
+	renderer->Init();
 
-	Gui* gui = new Gui(window->m_Window);
-	gui->Init();
+	//Gui* gui = new Gui(renderer->m_Window);
+	//gui->Init();
 
 	float verteics[8] = {
 		-0.5f, -0.5f,
@@ -27,46 +22,35 @@ int main()
 		2, 3, 0
 	};
 
-	VertexArray* va = new VertexArray();
-	VertexBuffer* vb = new VertexBuffer(verteics, 4 * 2 * sizeof(float));
+	VertexArray va;
+	VertexBuffer vb(verteics, 4 * 2 * sizeof(float));
 
 	VertexBufferLayout layout;
 	layout.Push<float>(2);
-	va->AddBuffer(*vb, layout);
+	va.AddBuffer(vb, layout);
 
-	IndexBuffer* ib = new IndexBuffer(indices, 6);
+	IndexBuffer ib(indices, 6);
 
-	ShaderProgramSource source = ParseShader("res/shaders/basic.glsl");
-	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
-	glUseProgram(shader);
+	Shader shader("res/shaders/basic.glsl");
+	shader.Bind();
+	shader.SetUniform4f("u_color", vec4(0.6f, 0.2f, 0.8f, 1.0f));
 
-	int location = glGetUniformLocation(shader, "u_color");
-	glUniform4f(location, 0.6f, 0.2f, 0.8f, 1.0f);
-	
-	va->UnBind();
-	ib->UnBind();
-	vb->UnBind();
-	glUseProgram(0);
-	
+	va.UnBind();
+	ib.UnBind();
+	vb.UnBind();
+	shader.UnBind();
 
-	while (!glfwWindowShouldClose(window->m_Window))
+	while (!glfwWindowShouldClose(renderer->m_Window))
 	{
-		window->Clear(vec4(0.2f, 0.3f, 0.3f, 1.0f));
+		renderer->Clear(vec4(0.2f, 0.3f, 0.3f, 1.0f));
 
-		glUseProgram(shader);
-		va->Bind();
-		ib->Bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		renderer->Draw(va, ib, shader);
 
-		gui->StartFrame();
-		gui->Render();
-		window->Render();
+		//gui->StartFrame();
+		//gui->Render();
+		renderer->Render();
 	}
 
-	delete va;
-	delete vb;
-	delete ib;
-
-	delete gui;
-	delete window;
+	//delete gui;
+	delete renderer;
 }

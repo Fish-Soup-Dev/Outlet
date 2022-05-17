@@ -88,8 +88,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\engine\Shader.cpp" />
+    <ClCompile Include="src\engine\IndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\engine\Renderer.cpp" />
     <ClCompile Include="src\ven\imgui\imgui.cpp" />
     <ClCompile Include="src\ven\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\ven\imgui\imgui_draw.cpp" />
@@ -97,12 +99,13 @@
     <ClCompile Include="src\ven\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\ven\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\ven\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
-    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\engine\VertexBuffer.cpp" />
+    <ClCompile Include="src\engine\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\VertexBufferLayout.h" />
-    <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\engine\Shader.h" />
+    <ClInclude Include="src\engine\VertexBufferLayout.h" />
+    <ClInclude Include="src\engine\IndexBuffer.h" />
     <ClInclude Include="src\vec\vec.h" />
     <ClInclude Include="src\Gui.h" />
     <ClInclude Include="src\vec\vec2.h" />
@@ -116,10 +119,10 @@
     <ClInclude Include="src\ven\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\ven\imgui\imstb_textedit.h" />
     <ClInclude Include="src\ven\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\engine\Renderer.h" />
     <ClInclude Include="src\vec\vec4.h" />
-    <ClInclude Include="src\VertexBuffer.h" />
-    <ClInclude Include="src\VertexArray.h" />
+    <ClInclude Include="src\engine\VertexBuffer.h" />
+    <ClInclude Include="src\engine\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basic.glsl" />
