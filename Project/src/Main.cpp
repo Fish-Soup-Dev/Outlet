@@ -2,6 +2,9 @@
 #include "Gui.h"
 #include "vec/vec.h"
 
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -13,7 +16,7 @@ struct ShaderProgramSource
 	std::string FragmentSource;
 };
 
-static ShaderProgramSource ParseShader(const std::string& filepath)
+ShaderProgramSource ParseShader(const std::string& filepath)
 {
 	std::ifstream stream(filepath);
 
@@ -43,7 +46,7 @@ static ShaderProgramSource ParseShader(const std::string& filepath)
 	return { ss[0].str(), ss[1].str() };
 }
 
-static unsigned int CompileShader(unsigned int type, const std::string& source)
+unsigned int CompileShader(unsigned int type, const std::string& source)
 {
 	unsigned int id = glCreateShader(type);
 	const char* src = source.c_str();
@@ -66,7 +69,7 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
 	return id;
 }
 
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
 {
 	unsigned int program = glCreateProgram();
 	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
@@ -91,32 +94,60 @@ int main()
 	Gui* gui = new Gui(window->m_Window);
 	gui->Init();
 
-	float positions[6] = {
+	float verteics[12] = {
+		// positions
 		-0.5f, -0.5f,
-		 0.0f,  0.5f,
-		 0.5f, -0.5f
+		 0.5f, -0.5f,
+		 0.5f,  0.5f,
+		-0.5f,  0.5f
 	};
 
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+	unsigned int indices[6] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	unsigned int vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	VertexBuffer* vb = new VertexBuffer(verteics, 4 * 2 * sizeof(float));
 	
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+
+	IndexBuffer* ib = new IndexBuffer(indices, 6);
 
 	ShaderProgramSource source = ParseShader("res/shaders/basic.glsl");
 	unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
 	glUseProgram(shader);
 
+	int location = glGetUniformLocation(shader, "u_color");
+	glUniform4f(location, 0.6f, 0.2f, 0.8f, 1.0f);
+
+	glBindVertexArray(0);
+	glUseProgram(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	
+
 	while (!glfwWindowShouldClose(window->m_Window))
 	{
 		window->Clear(vec4(0.2f, 0.3f, 0.3f, 1.0f));
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glUseProgram(shader);
+		glBindVertexArray(vao);
+		ib->Bind();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		gui->StartFrame();
 		gui->Render();
 		window->Render();
 	}
+
+	delete vb;
+	delete ib;
+
+	delete gui;
+	delete window;
 }
