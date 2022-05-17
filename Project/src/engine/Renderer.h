@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "../vec/vec.h"
+#include "glm/glm.hpp"
 
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
@@ -26,7 +26,7 @@ public:
 	~Renderer();
 
 	void Init();
-	void Clear(colorRGBA color) const;
+	void Clear(const glm::vec4 color) const;
 	void Render();
 	void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
 };

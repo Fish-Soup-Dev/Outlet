@@ -4,6 +4,8 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
+#include "glm/glm.hpp"
+
 class Gui
 {
 private:
@@ -39,16 +41,16 @@ public:
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void WindowBegin(const char* title, vec2 WindowSize, vec2 WindowPos)
+	void WindowBegin(const char* title, glm::vec2 WindowSize, glm::vec2 WindowPos)
 	{
-		ImGui::SetNextWindowPos(ImVec2(WindowPos.x(), WindowPos.y()));
-		ImGui::SetNextWindowSize(ImVec2(WindowSize.x(), WindowSize.y()));
+		ImGui::SetNextWindowPos(ImVec2(WindowPos.x, WindowPos.y));
+		ImGui::SetNextWindowSize(ImVec2(WindowSize.x, WindowSize.y));
 		ImGui::Begin(title, NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
 	}
 
-	void WindowBegin(const char* title, vec2 WindowSize)
+	void WindowBegin(const char* title, glm::vec2 WindowSize)
 	{
-		ImGui::SetNextWindowSize(ImVec2(WindowSize.x(), WindowSize.y()));
+		ImGui::SetNextWindowSize(ImVec2(WindowSize.x, WindowSize.y));
 		ImGui::Begin(title, NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 	}
 
@@ -67,10 +69,10 @@ public:
 		ImGui::Text(text);
 	}
 
-	bool Button(const char* lable, const vec2 size, const colorRGB buttonColor)
+	bool Button(const char* lable, const glm::vec2 size, const glm::vec3 buttonColor)
 	{
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(buttonColor.r(), buttonColor.g(), buttonColor.b())));
-		if (ImGui::Button(lable, ImVec2(size.x(), size.y())))
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(buttonColor.r, buttonColor.g, buttonColor.b)));
+		if (ImGui::Button(lable, ImVec2(size.x, size.y)))
 		{
 			ImGui::PopStyleColor(1);
 			return true;
@@ -79,8 +81,8 @@ public:
 		return false;
 	}
 
-	void ProgressBar(float progress, const vec2 size)
+	void ProgressBar(float progress, const glm::vec2 size)
 	{
-		ImGui::ProgressBar(progress, ImVec2(size.x(), size.y()));
+		ImGui::ProgressBar(progress, ImVec2(size.x, size.y));
 	}
 };

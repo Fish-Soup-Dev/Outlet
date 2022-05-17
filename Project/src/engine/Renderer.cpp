@@ -41,11 +41,14 @@ void Renderer::Init()
 	}
 
 	std::cout << glGetString(GL_VERSION) << std::endl;
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 }
 
-void Renderer::Clear(colorRGBA color) const
+void Renderer::Clear(const glm::vec4 color) const
 {
-	glClearColor(color.r(), color.g(), color.b(), color.a());
+	glClearColor(color.r, color.g, color.b, color.a);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
