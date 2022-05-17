@@ -4,6 +4,7 @@
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 #include <iostream>
 #include <fstream>
@@ -94,8 +95,7 @@ int main()
 	Gui* gui = new Gui(window->m_Window);
 	gui->Init();
 
-	float verteics[12] = {
-		// positions
+	float verteics[8] = {
 		-0.5f, -0.5f,
 		 0.5f, -0.5f,
 		 0.5f,  0.5f,
@@ -107,14 +107,12 @@ int main()
 		2, 3, 0
 	};
 
-	unsigned int vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
+	VertexArray* va = new VertexArray();
 	VertexBuffer* vb = new VertexBuffer(verteics, 4 * 2 * sizeof(float));
-	
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+
+	VertexBufferLayout layout;
+	layout.Push<float>(2);
+	va->AddBuffer(*vb, layout);
 
 	IndexBuffer* ib = new IndexBuffer(indices, 6);
 
@@ -124,11 +122,11 @@ int main()
 
 	int location = glGetUniformLocation(shader, "u_color");
 	glUniform4f(location, 0.6f, 0.2f, 0.8f, 1.0f);
-
-	glBindVertexArray(0);
+	
+	va->UnBind();
+	ib->UnBind();
+	vb->UnBind();
 	glUseProgram(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
 
 	while (!glfwWindowShouldClose(window->m_Window))
@@ -136,7 +134,7 @@ int main()
 		window->Clear(vec4(0.2f, 0.3f, 0.3f, 1.0f));
 
 		glUseProgram(shader);
-		glBindVertexArray(vao);
+		va->Bind();
 		ib->Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
@@ -145,6 +143,7 @@ int main()
 		window->Render();
 	}
 
+	delete va;
 	delete vb;
 	delete ib;
 

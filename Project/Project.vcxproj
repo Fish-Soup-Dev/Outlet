@@ -98,8 +98,10 @@
     <ClCompile Include="src\ven\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\ven\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
+    <ClCompile Include="src\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\VertexBufferLayout.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\vec\vec.h" />
     <ClInclude Include="src\Gui.h" />
@@ -117,6 +119,7 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\vec\vec4.h" />
     <ClInclude Include="src\VertexBuffer.h" />
+    <ClInclude Include="src\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basic.glsl" />
