@@ -23,6 +23,7 @@ public:
 	void Bind() const;
 	void UnBind() const;
 
+	void SetUniform1i(const std::string& name, int v);
 	void SetUniform1f(const std::string& name, float v);
 	void SetUniform4f(const std::string& name, vec4 v);
 private:
@@ -30,5 +31,5 @@ private:
 	unsigned int CompileShader(unsigned int type, const std::string& source);
 	unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
 
-	unsigned int GetUniformLocation(const std::string& name);
+	int GetUniformLocation(const std::string& name);
 };

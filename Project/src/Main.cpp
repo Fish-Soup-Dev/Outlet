@@ -10,11 +10,11 @@ int main()
 	//Gui* gui = new Gui(renderer->m_Window);
 	//gui->Init();
 
-	float verteics[8] = {
-		-0.5f, -0.5f,
-		 0.5f, -0.5f,
-		 0.5f,  0.5f,
-		-0.5f,  0.5f
+	float verteics[16] = {
+		-0.5f, -0.5f,      0.0f, 0.0f,
+		 0.5f, -0.5f,      1.0f, 0.0f,
+		 0.5f,  0.5f,      1.0f, 1.0f,
+		-0.5f,  0.5f,      0.0f, 1.0f
 	};
 
 	unsigned int indices[6] = {
@@ -23,9 +23,10 @@ int main()
 	};
 
 	VertexArray va;
-	VertexBuffer vb(verteics, 4 * 2 * sizeof(float));
+	VertexBuffer vb(verteics, 4 * 4 * sizeof(float));
 
 	VertexBufferLayout layout;
+	layout.Push<float>(2);
 	layout.Push<float>(2);
 	va.AddBuffer(vb, layout);
 
@@ -33,7 +34,10 @@ int main()
 
 	Shader shader("res/shaders/basic.glsl");
 	shader.Bind();
-	shader.SetUniform4f("u_color", vec4(0.6f, 0.2f, 0.8f, 1.0f));
+
+	Texture texture("res/textures/bird.png");
+	texture.Bind();
+	shader.SetUniform1i("u_texture", 0);
 
 	va.UnBind();
 	ib.UnBind();
