@@ -44,12 +44,18 @@ void Renderer::Init()
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::Clear(const glm::vec4 color) const
 {
 	glClearColor(color.r, color.g, color.b, color.a);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::Render()
@@ -61,10 +67,10 @@ void Renderer::Render()
 	glfwSwapBuffers(m_Window);
 }
 
-void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const uint32_t indexCount, const Shader& shader) const
+void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
 {
 	shader.Bind();
 	va.Bind();
 	ib.Bind();
-	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }
