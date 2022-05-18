@@ -50,15 +50,6 @@ static Vertex* CreateQuad(Vertex* target, float x, float y, glm::vec4 color, flo
 	return target;
 }
 
-static glm::vec4 ConvertRGB(const uint32_t r, const uint32_t g, const uint32_t b, const uint32_t a)
-{
-	float R = (float)r / 255.0f;
-	float G = (float)g / 255.0f;
-	float B = (float)b / 255.0f;
-	float A = (float)a / 255.0f;
-	return glm::vec4(R, G, B, A);
-}
-
 static void loadOBJ(const char* path, std::vector <glm::vec3>& out_vertices, std::vector <uint32_t>& out_indices)
 {
 	FILE* file = fopen(path, "r");
@@ -82,6 +73,10 @@ static void loadOBJ(const char* path, std::vector <glm::vec3>& out_vertices, std
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			out_vertices.push_back(vertex);
 		}
+		else if (strcmp(lineHeader, "vn") == 0)
+		{
+
+		}
 		else if (strcmp(lineHeader, "f") == 0)
 		{
 			unsigned int vertexIndex[3];
@@ -101,7 +96,7 @@ int main()
 
 	std::vector <glm::vec3> objVertices;
 	std::vector <uint32_t> objIndices;
-	loadOBJ("res/objects/monk.obj", objVertices, objIndices);
+	loadOBJ("res/objects/plane.obj", objVertices, objIndices);
 
 	VertexArray va;
 	VertexBuffer vb(&objVertices[0], objVertices.size() * sizeof(glm::vec3));
@@ -113,9 +108,9 @@ int main()
 	IndexBuffer ib(&objIndices[0], objIndices.size() * sizeof(uint32_t));
 
 	glm::mat4 proj = glm::perspective(glm::radians(60.0f), (float)renderer->m_WindowWidth / (float)renderer->m_WindowHeight, 0.1f, 100.0f);
-	glm::mat4 veiw = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -3.5f));
+	glm::mat4 veiw = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -3.0f));
 
-	glm::mat4 model = glm::rotate(glm::mat4(1.0f), 90.0f, glm::vec3(0, 0, 1));
+	glm::mat4 model = glm::rotate(glm::mat4(1.0f), 0.4f, glm::vec3(1, 0, 0));
 
 	Shader shader("res/shaders/basic.glsl");
 	shader.Bind();
@@ -130,19 +125,23 @@ int main()
 	shader.UnBind();
 
 	float roateAngle = 0.0f;
+	float offset = 0.0f;
 
 	while (!glfwWindowShouldClose(renderer->m_Window))
 	{
 		renderer->Clear(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
 
 		shader.Bind();
-		glm::mat4 model = glm::rotate(glm::mat4(1.0f), roateAngle, glm::vec3(0, 1, 1));
+		glm::mat4 model = glm::rotate(glm::mat4(1.0f), 0.4f, glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), roateAngle, glm::vec3(0, 1, 0));
 		glm::mat4 mvp = proj * veiw * model;
+
 		shader.SetUniformMat4f("u_MVP", mvp);
+		shader.SetUniform1f("u_offset", offset);
 
 		renderer->Draw(va, ib, shader);
 
-		roateAngle += 0.01f;
+		roateAngle += 0.001f;
+		offset += 0.03f;
 		
 		renderer->Render();
 	}
