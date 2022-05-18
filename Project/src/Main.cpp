@@ -91,7 +91,7 @@ static void loadOBJ(const char* path, std::vector <glm::vec3>& out_vertices, std
 
 int main()
 {
-	Renderer* renderer = new Renderer(800, 600, "Program Window", false);
+	Renderer* renderer = new Renderer(800, 600, "Program Window", true);
 	renderer->Init();
 
 	std::vector <glm::vec3> objVertices;
