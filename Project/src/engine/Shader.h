@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 #include <unordered_map>
 #include "glm/glm.hpp"
 
@@ -14,7 +15,7 @@ class Shader
 {
 private:
 	std::string m_FilePath;
-	unsigned int m_RendererID;
+	uint32_t m_RendererID;
 	mutable std::unordered_map<std::string, int> m_UniformLocationCache;
 public:
 	Shader(const std::string& filepath);
@@ -29,8 +30,8 @@ public:
 	void SetUniformMat4f(const std::string& name, glm::mat4 matrix);
 private:
 	ShaderProgramSource ParseShader(const std::string& filepath);
-	unsigned int CompileShader(unsigned int type, const std::string& source);
-	unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
+	uint32_t CompileShader(uint32_t type, const std::string& source);
+	uint32_t CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
 
 	int GetUniformLocation(const std::string& name) const;
 };

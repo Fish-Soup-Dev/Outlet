@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cstdint>
 
 #include "glm/glm.hpp"
 
@@ -28,5 +29,5 @@ public:
 	void Init();
 	void Clear(const glm::vec4 color) const;
 	void Render();
-	void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+	void Draw(const VertexArray& va, const IndexBuffer& ib, uint32_t indexCount, const Shader& shader) const;
 };

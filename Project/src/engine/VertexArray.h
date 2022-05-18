@@ -1,13 +1,14 @@
 #pragma once
 
 #include "VertexBuffer.h"
+#include <cstdint>
 
 class VertexBufferLayout;
 
 class VertexArray
 {
 private:
-	unsigned int m_RendererID;
+	uint32_t m_RendererID;
 public:
 	VertexArray();
 	~VertexArray();

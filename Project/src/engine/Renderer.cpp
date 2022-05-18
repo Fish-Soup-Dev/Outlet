@@ -61,10 +61,10 @@ void Renderer::Render()
 	glfwSwapBuffers(m_Window);
 }
 
-void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
+void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const uint32_t indexCount, const Shader& shader) const
 {
 	shader.Bind();
 	va.Bind();
 	ib.Bind();
-	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 }

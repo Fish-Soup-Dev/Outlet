@@ -3,41 +3,92 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include <array>
+
+struct Vertex
+{
+	glm::vec3 Position;
+	glm::vec4 Color;
+	glm::vec2 TexCoords;
+	float TexID;
+};
+
+static Vertex* CreateQuad(Vertex* target, float x, float y, glm::vec4 color, float textureID)
+{
+	float size = 1.0f;
+	x += -0.5f;
+	y += -0.5f;
+
+	target->Position = glm::vec3(x, y, 0.0f);
+	target->Color = color;
+	target->TexCoords = glm::vec2(0.0f, 0.0f);
+	target->TexID = textureID;
+	target++;
+
+	target->Position = glm::vec3(x + size, y, 0.0f);
+	target->Color = color;
+	target->TexCoords = glm::vec2(1.0f, 0.0f);
+	target->TexID = textureID;
+	target++;
+
+	target->Position = glm::vec3(x + size, y + size, 0.0f);
+	target->Color = color;
+	target->TexCoords = glm::vec2(1.0f, 1.0f);
+	target->TexID = textureID;
+	target++;
+
+	target->Position = glm::vec3(x, y + size, 0.0f);
+	target->Color = color;
+	target->TexCoords = glm::vec2(0.0f, 1.0f);
+	target->TexID = textureID;
+	target++;
+
+	return target;
+}
+
 int main()
 {
 	Renderer* renderer = new Renderer(800, 600, "Program Window", false);
 	renderer->Init();
 
-	float verteics[] = {
-		-0.5f, -0.5f,  0.0f,
-		 0.5f, -0.5f,  0.0f,
-		 0.5f,  0.5f,  0.0f,
-		-0.5f,  0.5f,  0.0f
-	};
-
-	unsigned int indices[6] = {
-		0, 1, 2,
-		2, 3, 0
-	};
+	const size_t MaxQuadCount = 20;
+	const size_t MaxVertexCount = MaxQuadCount * 4;
+	const size_t MaxIndexCount = MaxQuadCount * 6;
 
 	VertexArray va;
-	VertexBuffer vb(verteics, 12 * sizeof(float));
+	VertexBuffer vb(nullptr, sizeof(Vertex) * MaxVertexCount);
 
 	VertexBufferLayout layout;
 	layout.Push<float>(3);
+	layout.Push<float>(4);
+	layout.Push<float>(2);
+	layout.Push<float>(1);
 	va.AddBuffer(vb, layout);
 
-	IndexBuffer ib(indices, 6);
+	uint32_t indices[MaxIndexCount];
+	uint32_t offeset = 0;
+	for (size_t i = 0; i < MaxIndexCount; i += 6)
+	{
+		indices[i + 0] = 0 + offeset;
+		indices[i + 1] = 1 + offeset;
+		indices[i + 2] = 2 + offeset;
+
+		indices[i + 3] = 2 + offeset;
+		indices[i + 4] = 3 + offeset;
+		indices[i + 5] = 0 + offeset;
+
+		offeset += 4;
+	}
+
+	IndexBuffer ib(indices, sizeof(indices));
 
 	glm::mat4 proj = glm::perspective(glm::radians(90.0f), (float)renderer->m_WindowWidth / (float)renderer->m_WindowHeight, 0.1f, 100.0f);
-	glm::mat4 veiw = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+	glm::mat4 veiw = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -2));
 
 	Shader shader("res/shaders/basic.glsl");
 	shader.Bind();
-	shader.SetUniform4f("u_color", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -1));
-	glm::mat4 mvp = proj * veiw * model;
+	glm::mat4 mvp = proj * veiw;
 
 	shader.SetUniformMat4f("u_MVP", mvp);
 
@@ -48,9 +99,23 @@ int main()
 
 	while (!glfwWindowShouldClose(renderer->m_Window))
 	{
-		renderer->Clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+		uint32_t indexCount = 0;
 
-		renderer->Draw(va, ib, shader);
+		std::array<Vertex, 20> vertices;
+		Vertex* buffer = vertices.data();
+
+		buffer = CreateQuad(buffer,  0.8f, 0.0f, glm::vec4(0.7f, 0.3f, 0.1f, 1.0f), 0);
+		indexCount += 6;
+
+		buffer = CreateQuad(buffer, -0.8f, 0.0f, glm::vec4(0.1f, 0.3f, 0.7f, 1.0f), 0);
+		indexCount += 6;
+
+		vb.Bind();
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+
+		renderer->Clear(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+
+		renderer->Draw(va, ib, indexCount, shader);
 		
 		renderer->Render();
 	}
