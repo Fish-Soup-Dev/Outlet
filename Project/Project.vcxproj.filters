@@ -63,6 +63,9 @@
     <ClCompile Include="src\ven\glm\detail\glm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\Renderer.h">
@@ -977,11 +980,14 @@
     <ClInclude Include="src\ven\glm\vector_relational.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\graphics\shaders\vertex.glsl" />
     <None Include="src\graphics\shaders\fragment.glsl" />
-    <None Include="res\shaders\basic.glsl" />
+    <None Include="res\shaders\WaveVertex.glsl" />
     <None Include="src\ven\glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -1399,5 +1405,8 @@
     <None Include="src\ven\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="res\shaders\WaveFragment.glsl" />
+    <None Include="res\shaders\BasicVertex.glsl" />
+    <None Include="res\shaders\BasicFragment.glsl" />
   </ItemGroup>
 </Project>

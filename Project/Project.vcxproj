@@ -76,18 +76,22 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)Project\src\ven;$(SolutionDir)Dep\GLEW\include;$(SolutionDir)Dep\GLFW\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dep\GLFW\lib-vc2022;$(SolutionDir)Dep\GLEW\lib\Release\Win32;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;opengl32.lib;user32.lib;gdi32.lib;Shell32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\Model.cpp" />
     <ClCompile Include="src\engine\Shader.cpp" />
     <ClCompile Include="src\engine\IndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -106,6 +110,7 @@
     <ClCompile Include="src\engine\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\Model.h" />
     <ClInclude Include="src\engine\Shader.h" />
     <ClInclude Include="src\engine\VertexBufferLayout.h" />
     <ClInclude Include="src\engine\IndexBuffer.h" />
@@ -412,7 +417,10 @@
     <ClInclude Include="src\engine\Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\basic.glsl" />
+    <None Include="res\shaders\BasicFragment.glsl" />
+    <None Include="res\shaders\BasicVertex.glsl" />
+    <None Include="res\shaders\WaveFragment.glsl" />
+    <None Include="res\shaders\WaveVertex.glsl" />
     <None Include="src\graphics\shaders\fragment.glsl" />
     <None Include="src\graphics\shaders\vertex.glsl" />
     <None Include="src\ven\glm\detail\func_common.inl" />

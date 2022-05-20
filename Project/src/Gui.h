@@ -64,6 +64,12 @@ public:
 		ImGui::End();
 	}
 
+	void ShowFps()
+	{
+		ImGui::Text("Fps: %i", (int)ImGui::GetIO().Framerate);
+		ImGui::Text("Frame Time %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
+	}
+
 	void Text(const char* text)
 	{
 		ImGui::Text(text);
